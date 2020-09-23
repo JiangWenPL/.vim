@@ -33,7 +33,7 @@ Plugin 'mindriot101/vim-yapf'
 call vundle#end()
 filetype plugin indent on
 
-let g:ycm_server_python_interpreter='/home/pengsida/Software/anaconda3/bin/python'
+let g:ycm_server_python_interpreter='/home/wenjiang/miniconda3/envs/vm/bin/python'
 let g:ycm_global_ycm_extra_conf='~/.vim/.ycm_extra_conf.py'
 let g:ycm_filetype_blacklist={}
 set completeopt-=preview
@@ -44,7 +44,7 @@ let g:BASH_Ctrl_j = 'off'
 nnoremap <C-j> :YcmCompleter GoToDefinitionElseDeclaration<CR>
 set clipboard=unnamed
 
-inoremap <expr> <Tab> exists("g:loaded_snips") ? "\<C-r>=snipMate#TriggerSnippet()\<CR>" : "\<Tab>"
+inoremap <expr> <S-Tab> exists("g:loaded_snips") ? "\<C-r>=snipMate#TriggerSnippet()\<CR>" : "\<Tab>"
 " inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : exists("g:loaded_snips") ? "\<C-r>=snipMate#TriggerSnippet()\<CR>" : "\<Tab>"
 
 set clipboard=unnamed
@@ -95,15 +95,40 @@ let g:ctrlp_bufname_mod = ':~:.'
 let g:ctrlp_bufpath_mod = ''
 unlet g:ctrlp_custom_ignore
 let g:ctrlp_custom_ignore = {
-  \ 'dir':  '\v[\/](node_modules|record|cache)|\v[\/]\.(git|hg|svn)$',
+  \ 'dir':  '\v[\/](node_modules|record|cache|work_dirs)|\v[\/]\.(git|hg|svn)$',
   \ 'file': '\v\.(exe|so|dll|npy|pkl|png|jpg|pth|ply|mp4)$',
   \ 'link': 'some_bad_symbolic_links',
   \ }
 
 nnoremap <C-n> :tabnew<CR>
-vnoremap <C-y> "+y
+" vnoremap <C-y> "+y
 
 nmap <C-g> vgc:w<CR>
 vmap <C-g> gc:w<CR>
 
 let g:yapf_style = 'pep8'
+
+" Cursor in terminal
+" https://vim.fandom.com/wiki/Configuring_the_cursor
+" 1 or 0 -> blinking block
+" 2 solid block
+" 3 -> blinking underscore
+" 4 solid underscore
+" Recent versions of xterm (282 or above) also support
+" 5 -> blinking vertical bar
+" 6 -> solid vertical bar
+    
+if &term =~ '^xterm'
+  " normal mode
+  let &t_EI .= "\<Esc>[0 q"
+  " insert mode
+  let &t_SI .= "\<Esc>[6 q"
+endif
+" normal mode
+let &t_EI .= "\<Esc>[0 q"
+" insert mode
+let &t_SI .= "\<Esc>[6 q"
+
+" Paste mode
+set pastetoggle=<F2>
+inoremap <C-Tab> <down><C-y>
